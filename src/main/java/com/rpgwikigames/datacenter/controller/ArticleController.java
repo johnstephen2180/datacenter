@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +55,16 @@ public class ArticleController {
 		Article article = articleService.getArticleById(appId)
 				.orElseThrow(() -> new ResourceNotFoundException("App", "id", appId));
 
+		article.setTitle(appDetails.getTitle());
+		article.setContent(appDetails.getContent());
+		return articleService.save(article);
+	}
+
+	@PatchMapping("/apps/{id}")
+	public Article updateNoteAttribute(@PathVariable(value = "id") Long appId, @Validated @RequestBody Article appDetails) {
+		Article article = articleService.getArticleById(appId)
+				.orElseThrow(() -> new ResourceNotFoundException("App", "id", appId));
+		
 		article.setTitle(appDetails.getTitle());
 		article.setContent(appDetails.getContent());
 		return articleService.save(article);
